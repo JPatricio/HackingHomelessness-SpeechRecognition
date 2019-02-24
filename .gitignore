@@ -5,3 +5,8 @@
 !.elasticbeanstalk/*.global.yml
 
 .idea
+*.pyc
+
+venv/
+
+.ebextensions

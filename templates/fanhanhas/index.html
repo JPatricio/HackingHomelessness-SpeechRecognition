@@ -1,0 +1,165 @@
+{% extends "fanhanhas/base.html" %}
+
+{% load staticfiles %}
+
+{% block css %}
+
+#recButton {
+	width: 230px;
+	height: 230px;
+	font-size: 0;
+	background-color: red;
+	border: 0;
+	border-radius: 230px;
+	margin: 18px;
+	outline: none;
+    position: fixed;
+    bottom: 250px;
+    left: 37%;
+}
+
+.notRec{
+	background-color: darkred !important;
+}
+
+.Rec{
+	animation-name: pulse;
+	animation-duration: 1.5s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+#middle_row{
+    position: fixed;
+    top: 40%;
+    transform: translateY(-50%);
+}
+
+#success_message {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+}
+
+#success_message_div {
+    height: 75px;
+    font-size: 30pt;
+}
+
+@keyframes pulse{
+	0%{
+		box-shadow: 0px 0px 5px 0px rgba(173,0,0,.3);
+	}
+	65%{
+		box-shadow: 0px 0px 5px 13px rgba(173,0,0,.3);
+	}
+	90%{
+		box-shadow: 0px 0px 5px 13px rgba(173,0,0,0);
+	}
+}
+
+#exampleInputEmail1 {
+    padding: 20px 10px;
+    line-height: 28px;
+    height: 125px;
+    font-size: 40pt;
+}
+
+#labnol {
+    position: fixed;
+    top: 120%;
+    transform: translateY(-50%);
+    width: 100%;
+}
+
+{% endblock css %}
+
+{% block js %}
+<script>
+
+function toggleDictation() {
+      if (!recording) {
+        if (window.hasOwnProperty('webkitSpeechRecognition')) {
+
+          recognition.start();
+          recording = true;
+          $('#recButton').removeClass("notRec");
+		  $('#recButton').addClass("Rec");
+          recognition.onresult = function(e) {
+            document.getElementById('transcript').value = e.results[0][0].transcript;
+            console.log(e.results[0][0].transcript);
+          };
+
+          recognition.onerror = function(e) {
+            console.log("2");
+            recognition.stop();
+          }
+
+        }
+       } else {
+        recognition.stop();
+        recording = false;
+        $('#recButton').removeClass("Rec");
+		$('#recButton').addClass("notRec");
+        var text = document.getElementById('transcript').value
+        var name = document.getElementById('exampleInputEmail1').value
+        console.log(text);
+        $.ajax({
+          type: "POST",
+          url: "report_generator",
+          data: { text: text,  client: name},
+          success: function(data){console.log(data);$("#success_message_div").show();},
+          failure: function(errMsg) {alert(errMsg);}
+        });
+     }
+  };
+
+var recording = false;
+var recognition = new webkitSpeechRecognition();
+window.onload = function() {
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  recognition.lang = "en-US";
+  $("#success_message_div").alert();
+  $("#success_message_div").hide();
+
+}
+</script>
+{% endblock js %}
+
+{% block body %}
+    <div class="container">
+        <br>
+        <br>
+        <div class="text-center">
+            <h1 style="font-size:10vw;">New Meeting</h1>
+        </div>
+        <div class="row" id="middle_row">
+            <div class="col col-2"><img src="{% static "fanhanhas/outline.png" %}" width=100 height=100/></div>
+            <div class="col col-8"><input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Client Name"></div>
+            <div class="col col-2"></div>
+        </div>
+        <div class="row text-center" id="success_message">
+            <div class="col col-9">
+                <div class="alert alert-success text-center" id="success_message_div" role="alert">
+                    Session recorded!
+                </div>
+            </div>
+            <div class="col col-3"></div>
+        </div>
+        <br>
+        <br>
+        <div class="text-center" style="padding-top:800px;">
+            <button class="notRec" id="recButton" onclick="toggleDictation();"></button>
+        </div>
+    </div>
+    <div>
+        <form id="labnol" action="">
+          <div class="speech">
+              <textarea type="text" name="q" id="transcript" placeholder="Speak"></textarea>
+          </div>
+        </form>
+    </div>
+{% endblock body %}

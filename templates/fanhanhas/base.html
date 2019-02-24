@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Session Tracker</title>
+
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.css">
+
+
+    <!-- fontawesome css -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- pkg needed for tooltips -->
+    <script src="https://unpkg.com/popper.js"></script>
+
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:500' rel='stylesheet'>
+
+    <!-- bootstrap js -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+    <style type="text/css">
+        body {
+            font-family: 'Montserrat' !important;
+            font-weight: bolder;
+        }
+        #main_title{
+            font-size: 50pt;
+        }
+        .footer-btn {
+            font-size: 50pt;
+        }
+        .footer{
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: lightgray;
+        }
+
+        .btn-info {
+            background-color: #ED7D31 !important;
+            border-color: #ED7D31 !important;
+        }
+
+        .fas {
+            color: #ED7D31;
+        }
+        #empty_space {
+            height: 100px;
+        }
+    {% block css %} {% endblock css %}
+    </style>
+
+
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+</head>
+
+
+{% block js %} {% endblock js %}
+
+<body>
+
+{% block body %}{% endblock body %}
+<div class="container">
+    <div class="row" id="empty_space"></div>
+</div>
+<footer class="footer">
+    <div class="row">
+        <div class="col col-6 text-center footer-btn"><a href="/"><i class="fas fa-list-ul"></i></a></div>
+        <div class="col col-6 text-center footer-btn"><a href="/recording"><i class="fas fa-microphone"></i></a></div>
+    </div>
+</footer>
+</body>
+</html>
